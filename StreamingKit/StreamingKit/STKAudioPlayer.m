@@ -484,7 +484,9 @@ static void AudioFileStreamPacketsProc(void* clientData, UInt32 numberBytes, UIn
         
         dispatch_async(dispatch_get_main_queue(), ^
         {
-            [self.delegate audioPlayer:self stateChanged:self.state previousState:previousState];
+            if(self.delegate) {
+                [self.delegate audioPlayer:self stateChanged:self.state previousState:previousState];
+            }
         });
     }
     else
@@ -983,7 +985,9 @@ static void AudioFileStreamPacketsProc(void* clientData, UInt32 numberBytes, UIn
     
     [self playbackThreadQueueMainThreadSyncBlock:^
     {
-        [self.delegate audioPlayer:self unexpectedError:errorCodeIn];
+        if(self.delegate) {
+            [self.delegate audioPlayer:self unexpectedError:errorCodeIn];
+        }
     }];
 }
 
@@ -1238,7 +1242,9 @@ static void AudioFileStreamPacketsProc(void* clientData, UInt32 numberBytes, UIn
         {
             [self playbackThreadQueueMainThreadSyncBlock:^
             {
-                [self.delegate audioPlayer:self didFinishPlayingQueueItemId:queueItemId withReason:stopReason andProgress:progress andDuration:duration];
+                if(self.delegate) {
+                    [self.delegate audioPlayer:self didFinishPlayingQueueItemId:queueItemId withReason:stopReason andProgress:progress andDuration:duration];
+                }
             }];
         }
         
@@ -1248,7 +1254,9 @@ static void AudioFileStreamPacketsProc(void* clientData, UInt32 numberBytes, UIn
             
             [self playbackThreadQueueMainThreadSyncBlock:^
             {
-                [self.delegate audioPlayer:self didStartPlayingQueueItemId:playingQueueItemId];
+                if(self.delegate) {
+                    [self.delegate audioPlayer:self didStartPlayingQueueItemId:playingQueueItemId];
+                }
             }];
         }
     }
@@ -1262,7 +1270,9 @@ static void AudioFileStreamPacketsProc(void* clientData, UInt32 numberBytes, UIn
         {
             [self playbackThreadQueueMainThreadSyncBlock:^
             {
-				[self.delegate audioPlayer:self didFinishPlayingQueueItemId:queueItemId withReason:stopReason andProgress:progress andDuration:duration];
+                if(self.delegate) {
+                    [self.delegate audioPlayer:self didFinishPlayingQueueItemId:queueItemId withReason:stopReason andProgress:progress andDuration:duration];
+                }
             }];
         }
     }
@@ -1678,7 +1688,9 @@ static void AudioFileStreamPacketsProc(void* clientData, UInt32 numberBytes, UIn
     
     [self dispatchSyncOnMainThread:^
     {
-        [self.delegate audioPlayer:self didFinishBufferingSourceWithQueueItemId:queueItemId];
+        if(self.delegate) {
+            [self.delegate audioPlayer:self didFinishBufferingSourceWithQueueItemId:queueItemId];
+        }
     }];
 
     pthread_mutex_lock(&playerMutex);
